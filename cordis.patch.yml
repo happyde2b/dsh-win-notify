@@ -1,0 +1,9 @@
+# dsh-win-notify 的配置层：插入插件行（跟随 bundle 安装到任意 profile）。
+# 如需调整行为，在 profile 的 cordis.patch.yml 里按 id 覆盖 config，例如：
+#   - id: win-notify
+#     config:
+#       onUserQuestion: false
+#       approvalReminderMs: 600000
+- insert:
+    - id: win-notify
+      name: dsh-win-notify

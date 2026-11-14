@@ -1,0 +1,31 @@
+{
+  "name": "dsh-win-notify",
+  "version": "0.2.0",
+  "description": "DSH Windows 通知插件：任务完成、任务出错、需要用户选择/回答、需要审批时，通过 Windows 右下角系统 Toast 通知用户；审批未处理每 5 分钟提醒；点击通知聚焦桌面端窗口。",
+  "keywords": [
+    "dsh",
+    "plugin",
+    "windows",
+    "notification",
+    "toast"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}
