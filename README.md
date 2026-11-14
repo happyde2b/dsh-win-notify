@@ -21,20 +21,24 @@ DSH Windows 通知插件：**任务完成、任务出错、需要用户选择/�
 
 ## 安装
 
+**前置**：Node.js 20+；设置环境变量 `DSH_HOME` 指向 DSH 数据家（如 `D:\DeepSeekHarness\dsh-home`），
+或安装时用 `--dsh-home <路径>` 显式传入。
+
 **方式 A：手动复制（默认，不需要 pnpm）**
 
 ```powershell
-node "D:\zhangsir_code\my-dsh-pluging\dshWindows通知\install.js"
-# → 复制到 <DSH_HOME>\profiles\desktop\node_modules\dsh-win-notify
-# → 更新 profile 的 package.json（dependencies + dsh.profile.bundles）
+cd dsh-win-notify
+node install.js                  # → <DSH_HOME>\profiles\desktop\node_modules\dsh-win-notify
+node install.js --profile web    # 指定 profile
+# 同步更新 profile 的 package.json（dependencies + dsh.profile.bundles）
 ```
 
 **方式 B：官方插件管理器（打包成 tgz 后安装）**
 
 ```powershell
-node "D:\zhangsir_code\my-dsh-pluging\dshWindows通知\install.js" --pack
-# 产物：D:\DeepSeekHarness\downloads\dsh-win-notify-0.2.0.tgz
-# 在 DSH 桌面端「设置 → 插件」里用 file: 路径安装该 tgz
+node install.js --pack                    # 产物：<DSH_HOME>\downloads\dsh-win-notify-<version>.tgz
+node install.js --pack --out D:\tmp       # 自定义输出目录
+# 在 DSH 桌面端「设置 → 插件 → 添加插件」里填该 tgz 的绝对路径，安装后启用
 ```
 
 两种方式都需要**重启 DSH 桌面端**生效（`lib/index.js` 被服务进程缓存）。
