@@ -1,6 +1,6 @@
 {
   "name": "dsh-win-notify",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "DSH Windows 通知插件：任务完成、任务出错、需要用户选择/回答、需要审批时，通过 Windows 右下角系统 Toast 通知用户；审批未处理每 5 分钟提醒；点击通知聚焦桌面端窗口。",
   "keywords": [
     "dsh",
