@@ -27,6 +27,7 @@ DSH Windows 通知插件：**任务完成、任务出错、需要用户选择/�
 **方式 A：手动复制（默认，不需要 pnpm）**
 
 ```powershell
+git clone https://github.com/happyde2b/dsh-win-notify.git
 cd dsh-win-notify
 node install.js                  # → <DSH_HOME>\profiles\desktop\node_modules\dsh-win-notify
 node install.js --profile web    # 指定 profile

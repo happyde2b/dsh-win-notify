@@ -10,6 +10,15 @@
     "toast"
   ],
   "license": "MIT",
+  "author": "happyde2b",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/happyde2b/dsh-win-notify.git"
+  },
+  "bugs": {
+    "url": "https://github.com/happyde2b/dsh-win-notify/issues"
+  },
+  "homepage": "https://github.com/happyde2b/dsh-win-notify#readme",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
