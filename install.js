@@ -2,8 +2,9 @@
 //
 //   node install.js                     # 安装到 <DSH_HOME>/profiles/desktop
 //   node install.js --profile web       # 指定 profile
+//   node install.js --dsh-home D:\dsh   # 显式指定 DSH 数据家（默认读环境变量 DSH_HOME）
 //   node install.js --pack              # 只打包成 tgz（供官方插件管理器安装）
-//   node install.js --pack --out D:\DeepSeekHarness\downloads
+//   node install.js --pack --out D:\tmp # 指定 tgz 输出目录
 //
 // 做的事：
 //   1. 复制插件包到 <DSH_HOME>/profiles/<profile>/node_modules/dsh-win-notify
@@ -25,9 +26,9 @@ const argValue = (name, fallback) => {
 }
 const pluginName = 'dsh-win-notify'
 const profile = argValue('--profile', 'desktop')
-// DSH_HOME：环境变量优先（本机已全局设置为 D:\DeepSeekHarness\dsh-home）；
-// 未设置时回退到本机默认数据家。源码已搬到与本工作区无关的目录，不能再按相对路径推算。
-const dshHome = process.env.DSH_HOME ?? 'D:\\DeepSeekHarness\\dsh-home'
+// DSH_HOME：--dsh-home 参数 > 环境变量 > 本机默认数据家。
+// 源码位置与数据家无关，不能再按相对路径推算。
+const dshHome = argValue('--dsh-home', process.env.DSH_HOME ?? 'D:\\DeepSeekHarness\\dsh-home')
 const profileDir = join(dshHome, 'profiles', profile)
 
 // 打包/安装时排除：安装脚本自身、内部文档、git 元数据、依赖目录。
