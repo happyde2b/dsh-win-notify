@@ -30,6 +30,14 @@ const profile = argValue('--profile', 'desktop')
 const dshHome = process.env.DSH_HOME ?? 'D:\\DeepSeekHarness\\dsh-home'
 const profileDir = join(dshHome, 'profiles', profile)
 
+// 打包/安装时排除：安装脚本自身、内部文档、git 元数据、依赖目录。
+// 源码改为 git 仓库后 .git 会混进来，必须显式排除（tarball 里见到 .git 会被插件管理器嫌弃）。
+const EXCLUDED_TOP = new Set(['install.js', 'AGENTS.md', '.git', '.gitignore', 'node_modules'])
+const include = (src) => {
+  const rel = relative(here, src)
+  return rel === '' || !EXCLUDED_TOP.has(rel.split(sep)[0])
+}
+
 // ---- pack 模式：生成 tarball（官方插件管理器可 file: 安装）----
 // npm/pnpm 的 tarball 约定：包内容必须位于顶层 `package/` 目录下。
 if (args.includes('--pack')) {
@@ -41,10 +49,7 @@ if (args.includes('--pack')) {
   const staging = join(tmpdir(), `dsh-pack-${Date.now()}`)
   const staged = join(staging, 'package')
   mkdirSync(staging, { recursive: true })
-  cpSync(here, staged, {
-    recursive: true,
-    filter: (src) => !src.endsWith(`${sep}install.js`) && !src.includes(`${sep}node_modules${sep}`),
-  })
+  cpSync(here, staged, { recursive: true, filter: include })
   const result = spawnSync('tar.exe', ['-czf', tgz, '-C', staging, 'package'], { stdio: 'inherit' })
   rmSync(staging, { recursive: true, force: true })
   if (result.status !== 0) {
@@ -71,10 +76,7 @@ if (!existsSync(manifestPath)) {
 
 const targetDir = join(profileDir, 'node_modules', pluginName)
 mkdirSync(join(profileDir, 'node_modules'), { recursive: true })
-cpSync(here, targetDir, {
-  recursive: true,
-  filter: (src) => !src.endsWith(`${sep}install.js`),
-})
+cpSync(here, targetDir, { recursive: true, filter: include })
 console.log(`copied plugin -> ${targetDir}`)
 
 const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'))
