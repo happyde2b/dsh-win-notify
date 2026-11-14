@@ -106,6 +106,12 @@
    80ms 轮询 `%TEMP%\dsh-win-notify-*` 的**出现时刻**，对比事件 emit 时刻验证节流/提醒间隔。
 10. **pnpm store 位置**：旧 profile 的 node_modules 链接自 `D:\.pnpm-store\v11`，与 pnpm 默认
     store 不一致（ERR_PNPM_UNEXPECTED_STORE）→ 手动复制安装更省事。
+11. **0.2.2-rc.3 起 `agents` 服务没有 `roots()` 了**（2026-11-14 实测）：旧 `isRootSession`
+    靠 `ctx.get('agents').roots()` 判断顶层，方法不存在 → 恒 false → 完成/出错/提问通知
+    全部被静默过滤（审批分支不过滤，所以"审批还能弹、完成不弹"）。改为读
+    `session.header`：`header.origin === 'subagent'` 或 `header.delegationDepth >= 1` 即非顶层。
+    排查手段：插件配置 `debugLog: '<绝对路径>'`，会记录 plugin loaded / 事件、root 判定、
+    notify / 节流跳过 / toast.ps1 退出码。
 
 ## 生效性
 

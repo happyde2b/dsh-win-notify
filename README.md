@@ -1,4 +1,4 @@
-﻿# dsh-win-notify
+# dsh-win-notify
 
 DSH Windows 通知插件：**任务完成、任务出错、需要用户选择/回答、需要审批**时，弹出 Windows 右下角系统 Toast 通知（进通知中心）；审批未处理每 5 分钟提醒一次；点击通知聚焦 / 启动 DSH 桌面端窗口。
 
@@ -57,11 +57,18 @@ node "D:\zhangsir_code\my-dsh-pluging\dshWindows通知\install.js" --pack
     minIntervalMs: 10000       # 同类通知最小间隔（毫秒）
     clickUrl: 'http://127.0.0.1:3080'     # 协议不可用时的回退地址
     desktopAumid: 'com.deepseek.harness'  # 通知归属的 AUMID；''=回退到 DSH.Notify
+    debugLog: '%TEMP%\\dsh-win-notify.log' # 排查日志；''=关闭
 ```
+
+`debugLog` 默认写到 `%TEMP%\dsh-win-notify.log`（超过 512 KB 自动滚动成 `.1`）。里面记录
+插件加载、turn/end 等事件的顶层判定（`root=true/false depth=… origin=…`）、实际发出的
+通知与节流跳过、以及 `toast.ps1` 的退出码——排查"为什么没弹"先看这个文件。
 
 ## 实现要点
 
 - 订阅持久化 `session/event` 流（与界面同一数据源），不侵入任何核心包；零第三方依赖。
+- 顶层判定读 `session.header`：`origin === 'subagent'` 或 `delegationDepth >= 1` 视为子代理
+  （0.2.2-rc.3 起 `agents` 服务已不再提供 `roots()`，旧写法会让所有完成通知被静默过滤）。
 - `lib/toast.ps1`：WinRT `ToastNotificationManager` 弹通知，AUMID 候选链
   `[desktopAumid, DSH.Notify, 系统 PowerShell AUMID, '']`；惰性注册 `dsh-desktop://` 协议
   （HKCU，含必需的 `URL Protocol` 标记）；首次运行会创建 `DSH Notifications.lnk` 注册桩
