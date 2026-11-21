@@ -120,3 +120,10 @@
 - 只读验证手段：`node --check lib/index.js`、PS `Parser::ParseFile` 语法检查、
   `reg.exe query HKCU\Software\Classes\dsh-desktop /s`、`Get-Process "DeepSeek Harness"`、
   `.\dsh.cmd --profile desktop --dump-config`（新环境无 dsh.cmd，可用桌面端内的插件清单 UI）。
+
+## Git 约定
+
+- 仓库：`D:\zhangsir_code\my-dsh-pluging\dshWindows通知`（源码主线），远端 `happyde2b/dsh-win-notify`。
+- **提交信息一律用中文**，格式「类型：简述」，类型用：初始导入 / 修复 / 功能 / 文档 / 发布准备 / 构建。
+- 例：`修复顶层判定：改用 session.header 判断根会话，恢复完成/出错/提问通知（0.2.1）`
+- 改完源码先 `node --check lib/index.js` 再提交；发版时同步 `package.json` 版本并打 tag。
